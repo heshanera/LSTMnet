@@ -4,4 +4,12 @@
         <activeConfTypeElem>1</activeConfTypeElem>
         <activeConfIndexElem>0</activeConfIndexElem>
     </data>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/heshan/Projects/NetBeansProjects/LSTM/MemoryCell.cpp</file>
+            <file>file:/home/heshan/Projects/NetBeansProjects/LSTM/main.cpp</file>
+            <file>file:/home/heshan/Projects/NetBeansProjects/LSTM/MemoryCell.h</file>
+        </group>
+    </open-files>
 </project-private>
