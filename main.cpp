@@ -16,7 +16,9 @@ int main(int argc, char** argv) {
 
     
     LSTMNet * lstm = new LSTMNet();
-    lstm->test();
+//    lstm->test();
+    lstm->train(1);
+
     
     return 0;
 }
