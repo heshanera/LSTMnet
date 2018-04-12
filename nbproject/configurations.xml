@@ -48,6 +48,12 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <cTool>
+          <standard>10</standard>
+        </cTool>
+        <ccTool>
+          <standard>8</standard>
+        </ccTool>
       </compileType>
       <item path="LSTMNet.cpp" ex="false" tool="1" flavor2="0">
       </item>
