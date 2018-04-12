@@ -12,58 +12,64 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
-
 #include <numeric>
-#include <functional>
+#include <array>
+//#include <functional>
 
 
 class LSTMNet {
 public:
-    LSTMNet();
+    LSTMNet(int neurons,int inputVecSize);
     LSTMNet(const LSTMNet& orig);
     virtual ~LSTMNet();
     
-    int forward(std::vector<double> Input);
-    int backward();
-    int train(int t);
-    
-    int test();
+    int train(std::vector<double> * input, std::vector<double> output, int trainDataSize, int timeSteps, float learningRate);
+
     
 private:
+    int forward(std::vector<double> * input, int timeSteps);
+    int backward(std::vector<double> output, int timeSteps);
     double sigmoid(double x);
     std::vector<double> sigmoid(std::vector<double> x);
     int initWeights();
+    int clearVectors();
     int printVector(std::vector<double> vec);
+    
 private:
     int neurons;
     int inputVectDim;
-    double ** Wf;
-    double ** Wi;
-    double ** Wc;
-    double ** Wo;
-    double ** Wy;
-    double ** biasArr; // bf bi bc bo
-    double * by;
     
+    std::vector<double> * aWeightVecArr;
+    std::vector<double> * iWeightVecArr;
+    std::vector<double> * fWeightVecArr;
+    std::vector<double> * oWeightVecArr;
     
-    std::vector<double> fWeightVec;
-    std::vector<double> iWeightVec;
-    std::vector<double> cWeightVec;
-    std::vector<double> oWeightVec;
-    std::vector<double> yWeightVec;
+    double * aBiasArr;
+    double * iBiasArr;
+    double * fBiasArr;
+    double * oBiasArr;
     
-    double out_t;
+    std::vector<double> * neuronOutArr;
+    std::vector<double> * neuronStateArr;
     
-    double f_t;
-    double i_t;
-    double c_dash_t;
-    double c_t;
-    double o_t;
+    std::vector<double> * aGateVecArr;
+    std::vector<double> * iGateVecArr;
+    std::vector<double> * fGateVecArr;
+    std::vector<double> * oGateVecArr;
     
-    std::vector<double> deltaX_t;
-    std::vector<double> deltaOut_0;
+    std::vector<double> * aGateDeltaVecArr;
+    std::vector<double> * iGateDeltaVecArr;
+    std::vector<double> * fGateDeltaVecArr;
+    std::vector<double> * oGateDeltaVecArr;
     
-    std::vector<double> * deltaGateArray;
+    std::vector<double> * xDeltaVecArr;
+    
+    std::vector<double> DeltaOutVec;
+    
+    std::vector<double> * aDeltaWeightVecArr;
+    std::vector<double> * iDeltaWeightVecArr;
+    std::vector<double> * fDeltaWeightVecArr;
+    std::vector<double> * oDeltaWeightVecArr;
     
 
 };
