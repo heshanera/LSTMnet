@@ -16,37 +16,85 @@ int main(int argc, char** argv) {
 
     int neurons = 1;
     int inputVecSize = 5;
-    int trainDataSize = 2;
-    int timeSteps = 2;
-    float learningRate = 0.1;
+    int trainDataSize = 50;
+    int timeSteps = 5;
+    float learningRate = 0.2;
     
     LSTMNet * lstm = new LSTMNet(neurons,inputVecSize);
     
     std::vector<double> * input;
-    input = new std::vector<double>[2];
+    input = new std::vector<double>[50];
     
-    std::vector<double> vec1;
-    vec1.push_back(0.1);
-    vec1.push_back(0.3);
-    vec1.push_back(0.8);
-    vec1.push_back(1.1);
-    vec1.push_back(2.3);
-    
-    std::vector<double> vec2;
-    vec2.push_back(2.1);
-    vec2.push_back(0.5);
-    vec2.push_back(1.5);
-    vec2.push_back(0.7);
-    vec2.push_back(3.4);
-    
-    input[0] = vec1;
-    input[1] = vec2;
+    std::vector<double> inputVec;
+    for (int i = 0; i < 50; i+=5) {
+        
+        inputVec.clear();
+        for (int j = 0; j < 5; j++ ){
+            inputVec.push_back(0.1);
+        }
+        input[i] = inputVec;
+        
+        inputVec.clear();
+        for (int j = 0; j < 5; j++ ){
+            inputVec.push_back(0.2);
+        }
+        input[i+1] = inputVec;
+        
+        inputVec.clear();
+        for (int j = 0; j < 5; j++ ){
+            inputVec.push_back(0.3);
+        }
+        input[i+2] = inputVec;
+        
+        inputVec.clear();
+        for (int j = 0; j < 5; j++ ){
+            inputVec.push_back(0.2);
+        }
+        input[i+3] = inputVec;
+        
+        inputVec.clear();
+        for (int j = 0; j < 5; j++ ){
+            inputVec.push_back(0.1);
+        }
+        input[i+4] = inputVec;
+        
+    }
     
     std::vector<double> output;
-    output.push_back(1);
-    output.push_back(2);
+    for (int i = 0; i < 50; i+=5) {
+        
+        output.push_back(1);
+        output.push_back(2);
+        output.push_back(3);
+        output.push_back(2);
+        output.push_back(1);
+        
+    }
     
     lstm->train(input, output, trainDataSize, timeSteps, learningRate);
+    
+    
+    std::vector<double> vec1;
+    input = new std::vector<double>[1];
+    vec1.clear();
+    vec1.push_back(0.1);
+    vec1.push_back(0.1);
+    vec1.push_back(0.1);
+    vec1.push_back(0.1);
+    vec1.push_back(0.1);
+    input[0] = vec1;
+    
+    lstm->predict(input);
+    
+    vec1.clear();
+    vec1.push_back(0.2);
+    vec1.push_back(0.2);
+    vec1.push_back(0.2);
+    vec1.push_back(0.2);
+    vec1.push_back(0.2);
+    input[0] = vec1;
+    
+    lstm->predict(input);
     
     return 0;
 }

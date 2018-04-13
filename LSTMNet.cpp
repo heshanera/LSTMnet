@@ -113,15 +113,26 @@ int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int 
     double delta_a_t,delta_i_t,delta_f_t,delta_o_t;
     double delta_bias_a_t,delta_bias_i_t,delta_bias_f_t,delta_bias_o_t;
     
+    std::vector<double> *inVec;
+    
+    
     for (int i = 0; i < trainingIterations; i++){
+        
+        inVec = input + (timeSteps*i);
+        
+        std::vector<double>::const_iterator first = output.begin() + (timeSteps*i);
+        std::vector<double>::const_iterator last = output.begin() + (timeSteps*i + timeSteps);
+        std::vector<double> outVec(first, last);
+        
         forward(input,timeSteps);
-        backward(output,timeSteps);
+        backward(outVec,timeSteps);
         
         deltaVecPos = timeSteps-1;
         for (int j = 0; j < timeSteps; j++) {
-            inputVec = input[j+index];
-            inputVec.push_back(neuronOutArr[0].at(j+index));
             
+            inputVec = input[j+index];
+            inputVec.push_back(neuronOutArr[0].at(j));
+
             delta_a_t = aGateDeltaVecArr[0].at(deltaVecPos);
             delta_i_t = iGateDeltaVecArr[0].at(deltaVecPos);
             delta_f_t = fGateDeltaVecArr[0].at(deltaVecPos);
@@ -320,17 +331,13 @@ int LSTMNet::initWeights() {
 int LSTMNet::clearVectors() {
 
     for(int i = 0; i < neurons; i++) {
-        std::vector<double> aGateDeltaVec;
-        aGateDeltaVecArr[i] = aGateDeltaVec;
-        std::vector<double> iGateDeltaVec;
-        iGateDeltaVecArr[i] = iGateDeltaVec;
-        std::vector<double> fGateDeltaVec;
-        fGateDeltaVecArr[i] = fGateDeltaVec;
-        std::vector<double> oGateDeltaVec;
-        oGateDeltaVecArr[i] = oGateDeltaVec;
+        aGateDeltaVecArr[i].clear();
+        iGateDeltaVecArr[i].clear();
+        fGateDeltaVecArr[i].clear();
+        oGateDeltaVecArr[i].clear();
 
-        int weightVecSize = inputVectDim + 1;
-
+        int weightVecSize = inputVectDim + 1; 
+        
         std::vector<double> aDeltaWeightVec(weightVecSize,0);
         aDeltaWeightVecArr[i] = aDeltaWeightVec;
         std::vector<double> iDeltaWeightVec(weightVecSize,0);
@@ -339,8 +346,20 @@ int LSTMNet::clearVectors() {
         fDeltaWeightVecArr[i] = fDeltaWeightVec;
         std::vector<double> oDeltaWeightVec(weightVecSize,0);
         oDeltaWeightVecArr[i] = oDeltaWeightVec;
+        
+        double out = neuronOutArr[i].back();
+        neuronOutArr[i].clear();
+        neuronOutArr[i].push_back(out);
     }        
         
+    return 0;
+}
+
+int LSTMNet::predict(std::vector<double> * input) {
+
+    forward(input, 1);
+    std::cout<<neuronOutArr[0].at(0);
+    
     return 0;
 }
 
