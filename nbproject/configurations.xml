@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>FileReader.h</itemPath>
       <itemPath>LSTMNet.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -13,6 +14,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>FileReader.cpp</itemPath>
       <itemPath>LSTMNet.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -55,6 +57,10 @@
           <standard>8</standard>
         </ccTool>
       </compileType>
+      <item path="FileReader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FileReader.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="LSTMNet.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="LSTMNet.h" ex="false" tool="3" flavor2="0">
@@ -82,6 +88,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="FileReader.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="FileReader.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="LSTMNet.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="LSTMNet.h" ex="false" tool="3" flavor2="0">
