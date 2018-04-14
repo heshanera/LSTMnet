@@ -358,7 +358,10 @@ int LSTMNet::clearVectors() {
 int LSTMNet::predict(std::vector<double> * input) {
 
     forward(input, 1);
-    std::cout<<neuronOutArr[0].at(0);
+//    std::cout<<"\n"<<neuronOutArr[0].at(0)<<"\n";
+//    std::cout<<"\n"<<neuronOutArr[0].at(1)<<"\n";
+    
+    printVector(neuronOutArr[0]);
     
     return 0;
 }

@@ -16,17 +16,17 @@ int main(int argc, char** argv) {
 
     int neurons = 1;
     int inputVecSize = 5;
-    int trainDataSize = 50;
+    int trainDataSize = 100;
     int timeSteps = 5;
-    float learningRate = 0.2;
+    float learningRate = 0.01;
     
     LSTMNet * lstm = new LSTMNet(neurons,inputVecSize);
     
     std::vector<double> * input;
-    input = new std::vector<double>[50];
+    input = new std::vector<double>[100];
     
     std::vector<double> inputVec;
-    for (int i = 0; i < 50; i+=5) {
+    for (int i = 0; i < 100; i+=5) {
         
         inputVec.clear();
         for (int j = 0; j < 5; j++ ){
@@ -92,6 +92,16 @@ int main(int argc, char** argv) {
     vec1.push_back(0.2);
     vec1.push_back(0.2);
     vec1.push_back(0.2);
+    input[0] = vec1;
+    
+    lstm->predict(input);
+    
+    vec1.clear();
+    vec1.push_back(0.3);
+    vec1.push_back(0.3);
+    vec1.push_back(0.3);
+    vec1.push_back(0.3);
+    vec1.push_back(0.3);
     input[0] = vec1;
     
     lstm->predict(input);
