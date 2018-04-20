@@ -37,6 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/FileReader.o \
 	${OBJECTDIR}/LSTMNet.o \
+	${OBJECTDIR}/Preprocessor.o \
 	${OBJECTDIR}/main.o
 
 
@@ -73,6 +74,11 @@ ${OBJECTDIR}/LSTMNet.o: LSTMNet.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/LSTMNet.o LSTMNet.cpp
+
+${OBJECTDIR}/Preprocessor.o: Preprocessor.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Preprocessor.o Preprocessor.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}
