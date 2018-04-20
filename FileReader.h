@@ -18,7 +18,7 @@ public:
     FileReader(const FileReader& orig);
     virtual ~FileReader();
     
-    int read(std::string fileName, int valuesPerLine);
+    std::vector<double> read(std::string fileName, int valuesPerLine);
     
 private:
 
