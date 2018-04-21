@@ -5,7 +5,7 @@
                    displayName="Header Files"
                    projectFiles="true">
       <itemPath>DataProcessor.h</itemPath>
-      <itemPath>FileReader.h</itemPath>
+      <itemPath>FileProcessor.h</itemPath>
       <itemPath>LSTMNet.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -16,7 +16,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>DataProcessor.cpp</itemPath>
-      <itemPath>FileReader.cpp</itemPath>
+      <itemPath>FileProcessor.cpp</itemPath>
       <itemPath>LSTMNet.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -63,9 +63,9 @@
       </item>
       <item path="DataProcessor.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="FileReader.cpp" ex="false" tool="1" flavor2="0">
+      <item path="FileProcessor.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="FileReader.h" ex="false" tool="3" flavor2="0">
+      <item path="FileProcessor.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="LSTMNet.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -98,9 +98,9 @@
       </item>
       <item path="DataProcessor.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="FileReader.cpp" ex="false" tool="1" flavor2="0">
+      <item path="FileProcessor.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="FileReader.h" ex="false" tool="3" flavor2="0">
+      <item path="FileProcessor.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="LSTMNet.cpp" ex="false" tool="1" flavor2="0">
       </item>

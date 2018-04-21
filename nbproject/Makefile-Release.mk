@@ -36,7 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/DataProcessor.o \
-	${OBJECTDIR}/FileReader.o \
+	${OBJECTDIR}/FileProcessor.o \
 	${OBJECTDIR}/LSTMNet.o \
 	${OBJECTDIR}/main.o
 
@@ -70,10 +70,10 @@ ${OBJECTDIR}/DataProcessor.o: DataProcessor.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DataProcessor.o DataProcessor.cpp
 
-${OBJECTDIR}/FileReader.o: FileReader.cpp
+${OBJECTDIR}/FileProcessor.o: FileProcessor.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FileReader.o FileReader.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/FileProcessor.o FileProcessor.cpp
 
 ${OBJECTDIR}/LSTMNet.o: LSTMNet.cpp
 	${MKDIR} -p ${OBJECTDIR}

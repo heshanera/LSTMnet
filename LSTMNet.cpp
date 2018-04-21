@@ -10,6 +10,9 @@
 LSTMNet::LSTMNet(int neurons, int inputVecSize) {
     this->neurons = neurons;
     this->inputVectDim = inputVecSize;
+    
+    noOfIns = 0;
+    input2 = new std::vector<double>[6]; // no of time steps per training iteration
 }
 
 LSTMNet::LSTMNet(const LSTMNet& orig) {
@@ -355,15 +358,26 @@ int LSTMNet::clearVectors() {
     return 0;
 }
 
-int LSTMNet::predict(std::vector<double> * input) {
+double LSTMNet::predict(std::vector<double> * input) {
 
     forward(input, 1);
 //    std::cout<<"\n"<<neuronOutArr[0].at(0)<<"\n";
 //    std::cout<<"\n"<<neuronOutArr[0].at(1)<<"\n";
     
-    printVector(neuronOutArr[0]);
+//    printVector(neuronOutArr[0]);
+    int timeSteps = 6;
+    input2[noOfIns] = input[0];    
+    noOfIns++;
+    double result = *(neuronOutArr[0].end()-1);
+    output2.push_back(result);
+    if (noOfIns == timeSteps) {
+        noOfIns = 0;
+        std::cout<<"\n"<<noOfIns<<"**********\n";
+        train(input2, output2, timeSteps, timeSteps, 0.095);
+    }
     
-    return 0;
+    
+    return result;
 }
 
 double LSTMNet::sigmoid(double x) {

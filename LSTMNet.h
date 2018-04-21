@@ -24,7 +24,7 @@ public:
     virtual ~LSTMNet();
     
     int train(std::vector<double> * input, std::vector<double> output, int trainDataSize, int timeSteps, float learningRate);
-    int predict(std::vector<double> * input);
+    double predict(std::vector<double> * input);
 
     
 private:
@@ -72,7 +72,10 @@ private:
     std::vector<double> * fDeltaWeightVecArr;
     std::vector<double> * oDeltaWeightVecArr;
     
-
+    int noOfIns;
+    std::vector<double> * input2;
+    std::vector<double> output2;
+    
 };
 
 #endif /* LSTMNET_H */
