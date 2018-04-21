@@ -35,9 +35,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/DataProcessor.o \
 	${OBJECTDIR}/FileReader.o \
 	${OBJECTDIR}/LSTMNet.o \
-	${OBJECTDIR}/Preprocessor.o \
 	${OBJECTDIR}/main.o
 
 
@@ -65,6 +65,11 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/lstm ${OBJECTFILES} ${LDLIBSOPTIONS}
 
+${OBJECTDIR}/DataProcessor.o: DataProcessor.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/DataProcessor.o DataProcessor.cpp
+
 ${OBJECTDIR}/FileReader.o: FileReader.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -74,11 +79,6 @@ ${OBJECTDIR}/LSTMNet.o: LSTMNet.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/LSTMNet.o LSTMNet.cpp
-
-${OBJECTDIR}/Preprocessor.o: Preprocessor.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Preprocessor.o Preprocessor.cpp
 
 ${OBJECTDIR}/main.o: main.cpp
 	${MKDIR} -p ${OBJECTDIR}

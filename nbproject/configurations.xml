@@ -4,9 +4,9 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>DataProcessor.h</itemPath>
       <itemPath>FileReader.h</itemPath>
       <itemPath>LSTMNet.h</itemPath>
-      <itemPath>Preprocessor.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -15,9 +15,9 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>DataProcessor.cpp</itemPath>
       <itemPath>FileReader.cpp</itemPath>
       <itemPath>LSTMNet.cpp</itemPath>
-      <itemPath>Preprocessor.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -59,6 +59,10 @@
           <standard>8</standard>
         </ccTool>
       </compileType>
+      <item path="DataProcessor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="DataProcessor.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="FileReader.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="FileReader.h" ex="false" tool="3" flavor2="0">
@@ -66,10 +70,6 @@
       <item path="LSTMNet.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="LSTMNet.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Preprocessor.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Preprocessor.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -94,6 +94,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="DataProcessor.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="DataProcessor.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="FileReader.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="FileReader.h" ex="false" tool="3" flavor2="0">
@@ -101,10 +105,6 @@
       <item path="LSTMNet.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="LSTMNet.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Preprocessor.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Preprocessor.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>

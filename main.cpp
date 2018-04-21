@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "LSTMNet.h"
-#include "Preprocessor.h"
+#include "DataProcessor.h"
 #include "FileReader.h"
 
 /*
@@ -20,18 +20,14 @@ int main(int argc, char** argv) {
     
     std::vector<double> *tmp;
     tmp = new std::vector<double>();
-    tmp->push_back(1);
-    tmp->push_back(2);
-    tmp->push_back(4);
-    tmp->push_back(8);
-    tmp->push_back(3);
+    tmp->push_back(90);
     
     
-    Preprocessor * preproc;
-    preproc = new Preprocessor();
-    *tmp =  preproc->process(*tmp);
+    DataProcessor * dataproc;
+    dataproc = new DataProcessor();
+    *tmp =  dataproc->process(*tmp);
     
-    preproc->printVector(*tmp);
+    dataproc->printVector(*tmp);
     
 //    FileReader * reader = new FileReader();
 //    
