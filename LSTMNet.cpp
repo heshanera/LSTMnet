@@ -12,7 +12,7 @@ LSTMNet::LSTMNet(int neurons, int inputVecSize) {
     this->inputVectDim = inputVecSize;
     
     noOfIns = 0;
-    input2 = new std::vector<double>[6]; // no of time steps per training iteration
+    input2 = new std::vector<double>[5]; // no of time steps per training iteration
 }
 
 LSTMNet::LSTMNet(const LSTMNet& orig) {
@@ -126,6 +126,8 @@ int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int 
         std::vector<double>::const_iterator first = output.begin() + (timeSteps*i);
         std::vector<double>::const_iterator last = output.begin() + (timeSteps*i + timeSteps);
         std::vector<double> outVec(first, last);
+        
+        printVector(outVec);
         
         forward(input,timeSteps);
         backward(outVec,timeSteps);
@@ -358,22 +360,25 @@ int LSTMNet::clearVectors() {
     return 0;
 }
 
-double LSTMNet::predict(std::vector<double> * input) {
+double LSTMNet::predict(std::vector<double> * input, std::vector<double> output) {
 
     forward(input, 1);
 //    std::cout<<"\n"<<neuronOutArr[0].at(0)<<"\n";
 //    std::cout<<"\n"<<neuronOutArr[0].at(1)<<"\n";
     
 //    printVector(neuronOutArr[0]);
-    int timeSteps = 6;
+    int timeSteps = 5;
     input2[noOfIns] = input[0];    
     noOfIns++;
     double result = *(neuronOutArr[0].end()-1);
     output2.push_back(result);
     if (noOfIns == timeSteps) {
+//        printVector(neuronOutArr[0]);
+        double out = neuronOutArr[0].front();
+        neuronOutArr[0].clear();
+        neuronOutArr[0].push_back(out);
         noOfIns = 0;
-        std::cout<<"\n"<<noOfIns<<"**********\n";
-        train(input2, output2, timeSteps, timeSteps, 0.095);
+//        train(input2, output, timeSteps, timeSteps, 0.095);
     }
     
     

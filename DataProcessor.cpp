@@ -11,7 +11,7 @@
 #include <iostream>
 
 DataProcessor::DataProcessor() {
-    out_magnitude = 0;
+    out_magnitude = 0.0;
 }
 
 DataProcessor::DataProcessor(const DataProcessor& orig) { }
@@ -36,6 +36,7 @@ std::vector<double> DataProcessor::process(std::vector<double> vec, int vecType)
     
     // if output vector
     if (vecType == 1) out_magnitude = magnitude;
+    
     return vec;
 }
 
@@ -52,7 +53,6 @@ std::vector<double> DataProcessor::postprocess(std::vector<double> vec) {
 double DataProcessor::postProcess(double val) {
 
 //    std::cout<<"post processing...\n";
-    
     return val*out_magnitude;
 }
 

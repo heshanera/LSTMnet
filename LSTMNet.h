@@ -24,7 +24,7 @@ public:
     virtual ~LSTMNet();
     
     int train(std::vector<double> * input, std::vector<double> output, int trainDataSize, int timeSteps, float learningRate);
-    double predict(std::vector<double> * input);
+    double predict(std::vector<double> * input, std::vector<double> output);
 
     
 private:
