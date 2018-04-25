@@ -19,7 +19,7 @@
 
 class LSTMNet {
 public:
-    LSTMNet(int neurons,int inputVecSize);
+    LSTMNet(int memCells,int inputVecSize);
     LSTMNet(const LSTMNet& orig);
     virtual ~LSTMNet();
     
@@ -37,8 +37,9 @@ private:
     int printVector(std::vector<double> vec);
     
 private:
-    int neurons;
+    int memCells;
     int inputVectDim;
+    int timeSteps;
     
     std::vector<double> * aWeightVecArr;
     std::vector<double> * iWeightVecArr;
@@ -50,8 +51,8 @@ private:
     double * fBiasArr;
     double * oBiasArr;
     
-    std::vector<double> * neuronOutArr;
-    std::vector<double> * neuronStateArr;
+    std::vector<double> * memCellOutArr;
+    std::vector<double> * memCellStateArr;
     
     std::vector<double> * aGateVecArr;
     std::vector<double> * iGateVecArr;
@@ -72,9 +73,13 @@ private:
     std::vector<double> * fDeltaWeightVecArr;
     std::vector<double> * oDeltaWeightVecArr;
     
-    int noOfIns;
-    std::vector<double> * input2;
-    std::vector<double> output2;
+    
+    /**
+     * data structures used for the prediction
+     */
+    int noOfIns; // number of inputs given to the trained net to predict
+    std::vector<double> * input2; // vector array created using the prediction inputs
+    std::vector<double> output2; // target vector of the inputs given to predict
     
 };
 

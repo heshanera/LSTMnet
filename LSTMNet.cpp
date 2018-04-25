@@ -7,12 +7,11 @@
 
 #include "LSTMNet.h"
 
-LSTMNet::LSTMNet(int neurons, int inputVecSize) {
-    this->neurons = neurons;
+LSTMNet::LSTMNet(int memCells, int inputVecSize) {
+    this->memCells = memCells;
     this->inputVectDim = inputVecSize;
     
     noOfIns = 0;
-    input2 = new std::vector<double>[5]; // no of time steps per training iteration
 }
 
 LSTMNet::LSTMNet(const LSTMNet& orig) {
@@ -25,49 +24,52 @@ int LSTMNet::forward(std::vector<double> * input, int timeSteps) {
     
     std::vector<double> X;
     double a_t, i_t, f_t, o_t, state, out;
-    for(int i = 0; i < timeSteps; i++) {
+    for(int j = 0; j < memCells; j++){
         
-        X = input[i];
-        X.push_back(neuronOutArr[0][i]); // 0: id (number) of the neuron
-        
-        a_t = std::inner_product(
-            aWeightVecArr[0].begin(), 
-            aWeightVecArr[0].end(), 
-            X.begin(), 0.0
-        );
-        i_t = std::inner_product(
-            iWeightVecArr[0].begin(), 
-            iWeightVecArr[0].end(), 
-            X.begin(), 0.0
-        );
-        f_t = std::inner_product(
-            fWeightVecArr[0].begin(), 
-            fWeightVecArr[0].end(), 
-            X.begin(), 0.0
-        );
-        o_t = std::inner_product(
-            oWeightVecArr[0].begin(), 
-            oWeightVecArr[0].end(), 
-            X.begin(), 0.0
-        );
-        a_t = tanh(a_t + aBiasArr[0]); // 0: id (number) of the neuron
-        i_t = sigmoid(i_t + iBiasArr[0]); // 0: id (number) of the neuron
-        f_t = sigmoid(f_t + fBiasArr[0]); // 0: id (number) of the neuron
-        o_t = sigmoid(o_t + oBiasArr[0]); // 0: id (number) of the neuron
-        
-        state = (a_t * i_t) + (f_t * neuronStateArr[0].at(i));
-        neuronStateArr[0].push_back(state);
-        
-        out = tanh(state) * o_t;
-        neuronOutArr[0].push_back(out);
-        
-        aGateVecArr[0].push_back(a_t);
-        iGateVecArr[0].push_back(i_t);
-        fGateVecArr[0].push_back(f_t);
-        oGateVecArr[0].push_back(o_t);
-    }
-    neuronStateArr[0].push_back(0);
-    fGateVecArr[0].push_back(0);
+        for(int i = 0; i < timeSteps; i++) {
+            
+            X = input[i];
+            X.push_back(memCellOutArr[j][i]); // 0: id (number) of the memCell
+
+            a_t = std::inner_product(
+                aWeightVecArr[j].begin(), 
+                aWeightVecArr[j].end(), 
+                X.begin(), 0.0
+            );
+            i_t = std::inner_product(
+                iWeightVecArr[j].begin(), 
+                iWeightVecArr[j].end(), 
+                X.begin(), 0.0
+            );
+            f_t = std::inner_product(
+                fWeightVecArr[j].begin(), 
+                fWeightVecArr[j].end(), 
+                X.begin(), 0.0
+            );
+            o_t = std::inner_product(
+                oWeightVecArr[j].begin(), 
+                oWeightVecArr[j].end(), 
+                X.begin(), 0.0
+            );
+            a_t = tanh(a_t + aBiasArr[j]); // 0: id (number) of the memCell
+            i_t = sigmoid(i_t + iBiasArr[j]); // 0: id (number) of the memCell
+            f_t = sigmoid(f_t + fBiasArr[j]); // 0: id (number) of the memCell
+            o_t = sigmoid(o_t + oBiasArr[j]); // 0: id (number) of the memCell
+
+            state = (a_t * i_t) + (f_t * memCellStateArr[0].at(i));
+            memCellStateArr[j].push_back(state);
+
+            out = tanh(state) * o_t;
+            memCellOutArr[j].push_back(out);
+
+            aGateVecArr[j].push_back(a_t);
+            iGateVecArr[j].push_back(i_t);
+            fGateVecArr[j].push_back(f_t);
+            oGateVecArr[j].push_back(o_t);
+        }
+        memCellStateArr[j].push_back(0);
+        fGateVecArr[j].push_back(0);
+    }    
     
     return 0;
 }
@@ -76,35 +78,47 @@ int LSTMNet::backward(std::vector<double> output, int timeSteps) {
     
     double DeltaErr, deltaOut, deltaState_t;
     double delta_a_t, delta_i_t, delta_f_t, delta_o_t;
-    for (int i = timeSteps-1; i >= 0; i--) {
-        DeltaErr = neuronOutArr[0].at(i) - output.at(i); // 0: id (number) of the neuron
-        deltaOut = DeltaErr + DeltaOutVec.at(0); // 0: id (number) of the neuron
-        deltaState_t = deltaOut * oGateVecArr[0].at(i) * // 0: id (number) of the neuron
-                    (1- std::pow(tanh(neuronStateArr[0].at(i+1)),2)) + // 0: id (number) of the neuron
-                    neuronStateArr[0].at(i+2) * fGateVecArr[0].at(i+1); // 0: id (number) of the neuron
-        
-        delta_a_t = deltaState_t * iGateVecArr[0].at(i) * (1- std::pow(aGateVecArr[0].at(i),2));
-        delta_i_t = deltaState_t * aGateVecArr[0].at(i) * iGateVecArr[0].at(i) * (1-iGateVecArr[0].at(i));
-        delta_f_t = deltaState_t * neuronStateArr[0].at(i) * fGateVecArr[0].at(i) * (1-fGateVecArr[0].at(i));
-        delta_o_t = deltaState_t * tanh(neuronStateArr[0].at(i+1)) * oGateVecArr[0].at(i) * (1-oGateVecArr[0].at(i));
+    double memCellOutSum;
+    for (int j = 0; j < memCells; j++) {
+        for (int i = timeSteps-1; i >= 0; i--) {
+            memCellOutSum = 0;
+            for (int p = 0; p < memCells; p++) {
+                memCellOutSum += memCellOutArr[p].at(i);
+            }
+//            DeltaErr = memCellOutArr[j].at(i) - output.at(i); // 0: id (number) of the memCell
+            DeltaErr = memCellOutSum - output.at(i);
+            deltaOut = DeltaErr + DeltaOutVec.at(j); // 0: id (number) of the memCell
+            deltaState_t = deltaOut * oGateVecArr[j].at(i) * // 0: id (number) of the memCell
+                        (1- std::pow(tanh(memCellStateArr[j].at(i+1)),2)) + // 0: id (number) of the memCell
+                        memCellStateArr[j].at(i+2) * fGateVecArr[j].at(i+1); // 0: id (number) of the memCell
 
-        aGateDeltaVecArr[0].push_back(delta_a_t); // 0: id (number) of the neuron
-        iGateDeltaVecArr[0].push_back(delta_i_t); // 0: id (number) of the neuron
-        fGateDeltaVecArr[0].push_back(delta_f_t); // 0: id (number) of the neuron
-        oGateDeltaVecArr[0].push_back(delta_o_t); // 0: id (number) of the neuron
-        
-        DeltaOutVec.at(0) =
-            aWeightVecArr[0].at(inputVectDim) * delta_a_t +
-            iWeightVecArr[0].at(inputVectDim) * delta_i_t +
-            fWeightVecArr[0].at(inputVectDim) * delta_f_t +
-            oWeightVecArr[0].at(inputVectDim) * delta_o_t;
-        
+            delta_a_t = deltaState_t * iGateVecArr[j].at(i) * (1- std::pow(aGateVecArr[j].at(i),2));
+            delta_i_t = deltaState_t * aGateVecArr[j].at(i) * iGateVecArr[j].at(i) * (1-iGateVecArr[j].at(i));
+            delta_f_t = deltaState_t * memCellStateArr[j].at(i) * fGateVecArr[j].at(i) * (1-fGateVecArr[j].at(i));
+            delta_o_t = deltaState_t * tanh(memCellStateArr[j].at(i+1)) * oGateVecArr[j].at(i) * (1-oGateVecArr[j].at(i));
+
+            aGateDeltaVecArr[j].push_back(delta_a_t); // 0: id (number) of the memCell
+            iGateDeltaVecArr[j].push_back(delta_i_t); // 0: id (number) of the memCell
+            fGateDeltaVecArr[j].push_back(delta_f_t); // 0: id (number) of the memCell
+            oGateDeltaVecArr[j].push_back(delta_o_t); // 0: id (number) of the memCell
+
+            DeltaOutVec.at(j) =
+                aWeightVecArr[j].at(inputVectDim) * delta_a_t +
+                iWeightVecArr[j].at(inputVectDim) * delta_i_t +
+                fWeightVecArr[j].at(inputVectDim) * delta_f_t +
+                oWeightVecArr[j].at(inputVectDim) * delta_o_t;
+
+        }
     }
     
 }
 
 int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int trainDataSize, int timeSteps, float learningRate){
     
+    this->timeSteps = timeSteps;
+    // array used for the predictions.
+    input2 = new std::vector<double>[timeSteps]; // no of time steps per training iteration
+ 
     initWeights();
     
     int trainingIterations = floor(trainDataSize / timeSteps);
@@ -132,41 +146,45 @@ int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int 
         forward(input,timeSteps);
         backward(outVec,timeSteps);
         
-        deltaVecPos = timeSteps-1;
-        for (int j = 0; j < timeSteps; j++) {
+        for (int p = 0; p < memCells; p++) {
+            deltaVecPos = timeSteps-1;
+            for (int j = 0; j < timeSteps; j++) {
             
-            inputVec = input[j+index];
-            inputVec.push_back(neuronOutArr[0].at(j));
+                inputVec = input[j+index];
+                inputVec.push_back(memCellOutArr[p].at(j));
 
-            delta_a_t = aGateDeltaVecArr[0].at(deltaVecPos);
-            delta_i_t = iGateDeltaVecArr[0].at(deltaVecPos);
-            delta_f_t = fGateDeltaVecArr[0].at(deltaVecPos);
-            delta_o_t = oGateDeltaVecArr[0].at(deltaVecPos);
-            deltaVecPos--;
-            
-            int wPos = 0;
-            for (std::vector<double>::iterator it = inputVec.begin(); it != inputVec.end(); ++it) {
-                aDeltaWeightVecArr[0].at(wPos) += *it * delta_a_t;
-                iDeltaWeightVecArr[0].at(wPos) += *it * delta_i_t;
-                fDeltaWeightVecArr[0].at(wPos) += *it * delta_f_t;
-                oDeltaWeightVecArr[0].at(wPos) += *it * delta_o_t;
-                wPos++;
+                delta_a_t = aGateDeltaVecArr[p].at(deltaVecPos);
+                delta_i_t = iGateDeltaVecArr[p].at(deltaVecPos);
+                delta_f_t = fGateDeltaVecArr[p].at(deltaVecPos);
+                delta_o_t = oGateDeltaVecArr[p].at(deltaVecPos);
+                deltaVecPos--;
+
+                int wPos = 0;
+                for (std::vector<double>::iterator it = inputVec.begin(); it != inputVec.end(); ++it) {
+                    aDeltaWeightVecArr[p].at(wPos) += *it * delta_a_t;
+                    iDeltaWeightVecArr[p].at(wPos) += *it * delta_i_t;
+                    fDeltaWeightVecArr[p].at(wPos) += *it * delta_f_t;
+                    oDeltaWeightVecArr[p].at(wPos) += *it * delta_o_t;
+                    wPos++;
+                }
+
+                delta_bias_a_t += delta_a_t;
+                delta_bias_i_t += delta_i_t;
+                delta_bias_f_t += delta_f_t;
+                delta_bias_o_t += delta_o_t;
             }
+
+            aBiasArr[p] -= (delta_bias_a_t * learningRate);
+            iBiasArr[p] -= (delta_bias_i_t * learningRate);       
+            fBiasArr[p] -= (delta_bias_f_t * learningRate);
+            oBiasArr[p] -= (delta_bias_o_t * learningRate);
             
-            delta_bias_a_t += delta_a_t;
-            delta_bias_i_t += delta_i_t;
-            delta_bias_f_t += delta_f_t;
-            delta_bias_o_t += delta_o_t;
         }
         
-        aBiasArr[0] -= (delta_bias_a_t * learningRate);
-        iBiasArr[0] -= (delta_bias_i_t * learningRate);       
-        fBiasArr[0] -= (delta_bias_f_t * learningRate);
-        oBiasArr[0] -= (delta_bias_o_t * learningRate);
                 
         index += timeSteps;
         
-        for(int j = 0; j < neurons; j++) {
+        for(int j = 0; j < memCells; j++) {
             
             std::transform(
                 aDeltaWeightVecArr[j].begin(), 
@@ -222,39 +240,39 @@ int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int 
 
 int LSTMNet::initWeights() {
     
-    aWeightVecArr = new std::vector<double>[neurons];
-    iWeightVecArr = new std::vector<double>[neurons];
-    fWeightVecArr = new std::vector<double>[neurons];
-    oWeightVecArr = new std::vector<double>[neurons];
+    aWeightVecArr = new std::vector<double>[memCells];
+    iWeightVecArr = new std::vector<double>[memCells];
+    fWeightVecArr = new std::vector<double>[memCells];
+    oWeightVecArr = new std::vector<double>[memCells];
     
-    aBiasArr = new double[neurons];
-    iBiasArr = new double[neurons];
-    fBiasArr = new double[neurons];
-    oBiasArr = new double[neurons];
+    aBiasArr = new double[memCells];
+    iBiasArr = new double[memCells];
+    fBiasArr = new double[memCells];
+    oBiasArr = new double[memCells];
     
-    neuronOutArr = new std::vector<double>[neurons];
-    neuronStateArr = new std::vector<double>[neurons];
+    memCellOutArr = new std::vector<double>[memCells];
+    memCellStateArr = new std::vector<double>[memCells];
     
-    aGateVecArr = new std::vector<double>[neurons];
-    iGateVecArr = new std::vector<double>[neurons];
-    fGateVecArr = new std::vector<double>[neurons];
-    oGateVecArr = new std::vector<double>[neurons];
+    aGateVecArr = new std::vector<double>[memCells];
+    iGateVecArr = new std::vector<double>[memCells];
+    fGateVecArr = new std::vector<double>[memCells];
+    oGateVecArr = new std::vector<double>[memCells];
     
-    aGateDeltaVecArr = new std::vector<double>[neurons];
-    iGateDeltaVecArr = new std::vector<double>[neurons];
-    fGateDeltaVecArr = new std::vector<double>[neurons];
-    oGateDeltaVecArr = new std::vector<double>[neurons];
+    aGateDeltaVecArr = new std::vector<double>[memCells];
+    iGateDeltaVecArr = new std::vector<double>[memCells];
+    fGateDeltaVecArr = new std::vector<double>[memCells];
+    oGateDeltaVecArr = new std::vector<double>[memCells];
     
-    aDeltaWeightVecArr = new std::vector<double>[neurons];
-    iDeltaWeightVecArr = new std::vector<double>[neurons];
-    fDeltaWeightVecArr = new std::vector<double>[neurons];
-    oDeltaWeightVecArr = new std::vector<double>[neurons];
+    aDeltaWeightVecArr = new std::vector<double>[memCells];
+    iDeltaWeightVecArr = new std::vector<double>[memCells];
+    fDeltaWeightVecArr = new std::vector<double>[memCells];
+    oDeltaWeightVecArr = new std::vector<double>[memCells];
     
-    xDeltaVecArr = new std::vector<double>[neurons];
+    xDeltaVecArr = new std::vector<double>[memCells];
     
     int weightVecSize = inputVectDim + 1; 
     
-    for(int i = 0; i < neurons; i++) {
+    for(int i = 0; i < memCells; i++) {
         
         std::vector<double>  aWeightVec;
         aWeightVec.clear();
@@ -289,13 +307,13 @@ int LSTMNet::initWeights() {
         fBiasArr[i] = ( -1 + ((double)rand() / RAND_MAX) * 2);
         oBiasArr[i] = ( -1 + ((double)rand() / RAND_MAX) * 2);
         
-        std::vector<double>  neuronOutVec;
-        neuronOutVec.push_back(0);
-        neuronOutArr[i] = neuronOutVec;
+        std::vector<double>  memCellOutVec;
+        memCellOutVec.push_back(0);
+        memCellOutArr[i] = memCellOutVec;
         
-        std::vector<double>  neuronStateVec;
-        neuronStateVec.push_back(0);
-        neuronStateArr[i] = neuronStateVec;
+        std::vector<double>  memCellStateVec;
+        memCellStateVec.push_back(0);
+        memCellStateArr[i] = memCellStateVec;
         
         std::vector<double>  aGateVec;
         aGateVecArr[i] = aGateVec;
@@ -335,7 +353,7 @@ int LSTMNet::initWeights() {
 
 int LSTMNet::clearVectors() {
 
-    for(int i = 0; i < neurons; i++) {
+    for(int i = 0; i < memCells; i++) {
         aGateDeltaVecArr[i].clear();
         iGateDeltaVecArr[i].clear();
         fGateDeltaVecArr[i].clear();
@@ -352,9 +370,9 @@ int LSTMNet::clearVectors() {
         std::vector<double> oDeltaWeightVec(weightVecSize,0);
         oDeltaWeightVecArr[i] = oDeltaWeightVec;
         
-        double out = neuronOutArr[i].back();
-        neuronOutArr[i].clear();
-        neuronOutArr[i].push_back(out);
+        double out = memCellOutArr[i].back();
+        memCellOutArr[i].clear();
+        memCellOutArr[i].push_back(out);
     }        
         
     return 0;
@@ -363,23 +381,28 @@ int LSTMNet::clearVectors() {
 double LSTMNet::predict(std::vector<double> * input, std::vector<double> output) {
 
     forward(input, 1);
-//    std::cout<<"\n"<<neuronOutArr[0].at(0)<<"\n";
-//    std::cout<<"\n"<<neuronOutArr[0].at(1)<<"\n";
+//    std::cout<<"\n"<<memCellOutArr[0].at(0)<<"\n";
+//    std::cout<<"\n"<<memCellOutArr[0].at(1)<<"\n";
     
-//    printVector(neuronOutArr[0]);
-    int timeSteps = 5;
-    input2[noOfIns] = input[0];    
-    noOfIns++;
-    double result = *(neuronOutArr[0].end()-1);
-    output2.push_back(result);
-    if (noOfIns == timeSteps) {
-//        printVector(neuronOutArr[0]);
-        double out = neuronOutArr[0].front();
-        neuronOutArr[0].clear();
-        neuronOutArr[0].push_back(out);
-        noOfIns = 0;
-//        train(input2, output, timeSteps, timeSteps, 0.095);
+//    printVector(memCellOutArr[0]);
+//    input2[noOfIns] = input[0];    
+//    noOfIns++;
+    
+    double result = 0;
+    for (int i = 0; i < memCells; i++) {
+        result += *(memCellOutArr[i].end()-1);
     }
+    
+    
+//    output2.push_back(result);
+//    if (noOfIns == timeSteps) {
+//        printVector(memCellOutArr[0]);
+//        double out = memCellOutArr[0].front();
+//        memCellOutArr[0].clear();
+//        memCellOutArr[0].push_back(out);
+//        noOfIns = 0;
+//        train(input2, output, timeSteps, timeSteps, 0.095);
+//    }
     
     
     return result;
