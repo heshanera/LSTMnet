@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
     int trainDataSize = dataSize; 
     int timeSteps = 50;
     float learningRate = 0.045;
-    int predictions = 700;
+    int predictions = 1100;
     
     // Adding the time series in to a vector and preprocessing
     DataProcessor * dataproc;
@@ -98,13 +98,7 @@ int main(int argc, char** argv) {
         std::cout<<"result processed: "<<result<<std::endl<<std::endl;
         
         out_file<<result+23<<"\n";
-        
-        
-        
     }
-    
-    
-    
     return 0;
 }
 
