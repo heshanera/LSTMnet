@@ -22,6 +22,8 @@ public:
     
     int write(std::string fileName);
     int append(std::string line);
+    int writeUniVariate(std::string fileName, std::string outFileName, int valuesPerLine, int columnIndx);
+    
 private:
     std::ofstream out_file;
 

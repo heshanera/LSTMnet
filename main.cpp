@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
     int trainDataSize = dataSize; 
     int timeSteps = 50;
     float learningRate = 0.045;
-    int predictions = 1100;
+    int predictions = 1000;
     
     // Adding the time series in to a vector and preprocessing
     DataProcessor * dataproc;
@@ -32,7 +32,17 @@ int main(int argc, char** argv) {
     FileProcessor * fileProc;
     fileProc = new FileProcessor();
     std::vector<double> timeSeries;
-    timeSeries = fileProc->read("datasets/dummy2.txt",1);
+//    timeSeries = fileProc->read("datasets/dummy2.txt",1);
+//    timeSeries = fileProc->read("datasets/InternetTraff.txt",1);
+//    timeSeries = fileProc->read("datasets/treeAlmagreMountainPiarLocat.txt",1);
+    timeSeries = fileProc->read("datasets/treeAlmagreMountainPiarLocat.txt",1);
+    
+//    fileProc->writeUniVariate("datasets/internetTrafficData.csv","datasets/InternetTraff.txt",2,1);
+//    fileProc->writeUniVariate("datasets/monthlyReturnsOfValueweighted.csv","datasets/monthlyReturnsOfValueweighted.txt",2,1);
+//    fileProc->writeUniVariate("datasets/treeAlmagreMountainPiarLocat.csv","datasets/treeAlmagreMountainPiarLocat.txt",2,1);
+    
+    
+    
     timeSeries =  dataproc->process(timeSeries,1);
     
     
@@ -97,7 +107,7 @@ int main(int argc, char** argv) {
         result = dataproc->postProcess(result);
         std::cout<<"result processed: "<<result<<std::endl<<std::endl;
         
-        out_file<<result+23<<"\n";
+        out_file<<result*1.8+3<<"\n";
     }
     return 0;
 }
