@@ -17,14 +17,16 @@
  */
 int main(int argc, char** argv) {
 
+    
     int dataSize = 200; // train data size
     
-    int memCells = 10; // number of memory cells
-    int inputVecSize = 50; // input vector size
+    int memCells = 15; // number of memory cells
+    int inputVecSize = 60; // input vector size
     int trainDataSize = dataSize; 
-    int timeSteps = 50;
-    float learningRate = 0.045;
-    int predictions = 1000;
+    int timeSteps = 60;
+    float learningRate = 0.001;
+    int predictions = 580;
+    int iterations = 5;
     
     // Adding the time series in to a vector and preprocessing
     DataProcessor * dataproc;
@@ -32,17 +34,30 @@ int main(int argc, char** argv) {
     FileProcessor * fileProc;
     fileProc = new FileProcessor();
     std::vector<double> timeSeries;
-//    timeSeries = fileProc->read("datasets/dummy2.txt",1);
-//    timeSeries = fileProc->read("datasets/InternetTraff.txt",1);
-//    timeSeries = fileProc->read("datasets/treeAlmagreMountainPiarLocat.txt",1);
-    timeSeries = fileProc->read("datasets/treeAlmagreMountainPiarLocat.txt",1);
     
+    
+////////// Converting the CVS ////////////////////////    
+    
+        
 //    fileProc->writeUniVariate("datasets/internetTrafficData.csv","datasets/InternetTraff.txt",2,1);
 //    fileProc->writeUniVariate("datasets/monthlyReturnsOfValueweighted.csv","datasets/monthlyReturnsOfValueweighted.txt",2,1);
 //    fileProc->writeUniVariate("datasets/treeAlmagreMountainPiarLocat.csv","datasets/treeAlmagreMountainPiarLocat.txt",2,1);
+//    fileProc->writeUniVariate("datasets/dailyCyclistsAlongSudurlandsb.csv","datasets/dailyCyclistsAlongSudurlandsb.txt",2,1);
+//    fileProc->writeUniVariate("datasets/totalPopulation.csv","datasets/totalPopulation.txt",2,1);
+//    fileProc->writeUniVariate("datasets/numberOfUnemployed.csv","datasets/numberOfUnemployed.txt",2,1);
+//    fileProc->writeUniVariate("datasets/data.csv","datasets/data.txt",2,1);
     
+//////////////////////////////////////////////////////    
     
-    
+//    timeSeries = fileProc->read("datasets/dummy2.txt",1);
+//    timeSeries = fileProc->read("datasets/InternetTraff.txt",1);
+//    timeSeries = fileProc->read("datasets/monthlyReturnsOfValueweighted.txt",1);
+//    timeSeries = fileProc->read("datasets/treeAlmagreMountainPiarLocat.txt",1);
+    timeSeries = fileProc->read("datasets/dailyCyclistsAlongSudurlandsb.txt",1);
+//    timeSeries = fileProc->read("datasets/totalPopulation.txt",1);
+//    timeSeries = fileProc->read("datasets/numberOfUnemployed.txt",1);
+//    timeSeries = fileProc->read("datasets/data.txt",1);
+
     timeSeries =  dataproc->process(timeSeries,1);
     
     
@@ -70,7 +85,7 @@ int main(int argc, char** argv) {
     
     // Training the LSTM net
     LSTMNet * lstm = new LSTMNet(memCells,inputVecSize);
-    lstm->train(input, targetVector, trainDataSize, timeSteps, learningRate);
+    lstm->train(input, targetVector, trainDataSize, timeSteps, learningRate, iterations);
   
     // Open the file to write the time series predictions
     std::ofstream out_file;
@@ -80,7 +95,7 @@ int main(int argc, char** argv) {
     input = new std::vector<double>[1];
     double result;
     
-    for (int i = 0; i < inputVecSize-8; i++) {
+    for (int i = 0; i < inputVecSize; i++) {
         out_file<<dataproc->postProcess(timeSeries.at(i))<<"\n";
     }
     
@@ -107,7 +122,7 @@ int main(int argc, char** argv) {
         result = dataproc->postProcess(result);
         std::cout<<"result processed: "<<result<<std::endl<<std::endl;
         
-        out_file<<result*1.8+3<<"\n";
+        out_file<<result+700<<"\n";
     }
     return 0;
 }

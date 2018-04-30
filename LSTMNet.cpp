@@ -113,7 +113,25 @@ int LSTMNet::backward(std::vector<double> output, int timeSteps) {
     
 }
 
-int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int trainDataSize, int timeSteps, float learningRate){
+int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int trainDataSize, int timeSteps, float learningRate, int iterations){
+    
+    if ( iterations > 1 ) {
+        int dataSize = trainDataSize;
+        int itr;
+        trainDataSize = trainDataSize*iterations;
+        std::vector<double> * extdInput;
+        extdInput = new std::vector<double>[trainDataSize];
+        for (int i = 0; i < iterations; i++){
+            itr = i*dataSize;
+            for (int j = 0; j < dataSize; j++) {
+                extdInput[itr+j] = input[j];
+            }
+            if (i == (iterations -1)) break;
+            output.insert(output.end(), output.begin(), output.end());
+        }
+        input = new std::vector<double>[trainDataSize];
+        input = extdInput;
+    }
     
     this->timeSteps = timeSteps;
     // array used for the predictions.
@@ -236,6 +254,7 @@ int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int 
         
         clearVectors();
     }    
+    return 0;
 }
 
 int LSTMNet::initWeights() {
