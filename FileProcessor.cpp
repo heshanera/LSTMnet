@@ -41,6 +41,30 @@ std::vector<double> FileProcessor::read(std::string fileName, int valuesPerLine)
     
 }
 
+std::vector<double> FileProcessor::readMultivariate(std::string fileName, int valuesPerLine) {
+    
+    std::vector<double> values;
+    std::string line;
+    std::ifstream file (fileName);
+    int lineNo = 0;
+    if (file.is_open()) {
+        if (valuesPerLine == 1)  {
+            while ( getline (file,line) ) {
+                lineNo++;
+                try{
+                    values.push_back(std::stod(line));
+                } catch (std::exception& e) {
+                    std::cout<<std::endl<<"Error in line "<<lineNo<<": "<<e.what()<<std::endl;
+                }    
+            }
+        }
+        file.close();
+    }
+    else std::cout << "Unable to open file '"<<fileName<<"'"; 
+    return values;
+    
+}
+
 int FileProcessor::write(std::string fileName) {
     out_file.open(fileName,std::ofstream::out | std::ofstream::app);
 }

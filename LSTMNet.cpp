@@ -159,7 +159,7 @@ int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int 
         std::vector<double>::const_iterator last = output.begin() + (timeSteps*i + timeSteps);
         std::vector<double> outVec(first, last);
         
-        printVector(outVec);
+//        printVector(outVec);
         
         forward(input,timeSteps);
         backward(outVec,timeSteps);
@@ -305,13 +305,13 @@ int LSTMNet::initWeights() {
         for(int j = 0; j < weightVecSize; j++) {
             double w;
             w= (double)rand() / RAND_MAX;
-            aWeightVec.push_back(-1 + w * 2); // Min + w * (Max - Min);
+            aWeightVec.push_back(-0.01 + w * 0.02); // Min + w * (Max - Min);
             w= (double)rand() / RAND_MAX;
-            iWeightVec.push_back(-1 + w * 2); // Min + w * (Max - Min);
+            iWeightVec.push_back(-0.01 + w * 0.02); // Min + w * (Max - Min);
             w= (double)rand() / RAND_MAX;
-            fWeightVec.push_back(-1 + w * 2); // Min + w * (Max - Min);
+            fWeightVec.push_back(-0.01 + w * 0.02); // Min + w * (Max - Min);
             w= (double)rand() / RAND_MAX;
-            oWeightVec.push_back(-1 + w * 2); // Min + w * (Max - Min);
+            oWeightVec.push_back(-0.01 + w * 0.02); // Min + w * (Max - Min);
         }
         
         aWeightVecArr[i] = aWeightVec;
@@ -321,10 +321,10 @@ int LSTMNet::initWeights() {
         
         // generating random bias
         
-        aBiasArr[i] = ( -1 + ((double)rand() / RAND_MAX) * 2);
-        iBiasArr[i] = ( -1 + ((double)rand() / RAND_MAX) * 2);
-        fBiasArr[i] = ( -1 + ((double)rand() / RAND_MAX) * 2);
-        oBiasArr[i] = ( -1 + ((double)rand() / RAND_MAX) * 2);
+        aBiasArr[i] = ( -0.01 + ((double)rand() / RAND_MAX) * 0.02);
+        iBiasArr[i] = ( -0.01 + ((double)rand() / RAND_MAX) * 0.02);
+        fBiasArr[i] = ( -0.01 + ((double)rand() / RAND_MAX) * 0.02);
+        oBiasArr[i] = ( -0.01 + ((double)rand() / RAND_MAX) * 0.02);
         
         std::vector<double>  memCellOutVec;
         memCellOutVec.push_back(0);

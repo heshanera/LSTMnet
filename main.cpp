@@ -18,15 +18,15 @@
 int main(int argc, char** argv) {
 
     
-    int dataSize = 200; // train data size
+    int dataSize = 300; // train data size
     
-    int memCells = 15; // number of memory cells
-    int inputVecSize = 60; // input vector size
+    int memCells = 5; // number of memory cells
+    int inputVecSize = 100; // input vector size
     int trainDataSize = dataSize; 
-    int timeSteps = 60;
-    float learningRate = 0.001;
-    int predictions = 580;
-    int iterations = 5;
+    int timeSteps = 100;
+    float learningRate = 0.0005;
+    int predictions = 1000; // prediction points
+    int iterations = 5; // training iterations with training data
     
     // Adding the time series in to a vector and preprocessing
     DataProcessor * dataproc;
@@ -46,6 +46,8 @@ int main(int argc, char** argv) {
 //    fileProc->writeUniVariate("datasets/totalPopulation.csv","datasets/totalPopulation.txt",2,1);
 //    fileProc->writeUniVariate("datasets/numberOfUnemployed.csv","datasets/numberOfUnemployed.txt",2,1);
 //    fileProc->writeUniVariate("datasets/data.csv","datasets/data.txt",2,1);
+//    fileProc->writeUniVariate("datasets/monthlySunspotNumbers.csv","datasets/monthlySunspotNumbers.txt",2,1);
+//    fileProc->writeUniVariate("datasets/dailyMinimumTemperatures.csv","datasets/dailyMinimumTemperatures.txt",2,1);    
     
 //////////////////////////////////////////////////////    
     
@@ -53,11 +55,13 @@ int main(int argc, char** argv) {
 //    timeSeries = fileProc->read("datasets/InternetTraff.txt",1);
 //    timeSeries = fileProc->read("datasets/monthlyReturnsOfValueweighted.txt",1);
 //    timeSeries = fileProc->read("datasets/treeAlmagreMountainPiarLocat.txt",1);
-    timeSeries = fileProc->read("datasets/dailyCyclistsAlongSudurlandsb.txt",1);
+//    timeSeries = fileProc->read("datasets/dailyCyclistsAlongSudurlandsb.txt",1);
 //    timeSeries = fileProc->read("datasets/totalPopulation.txt",1);
 //    timeSeries = fileProc->read("datasets/numberOfUnemployed.txt",1);
 //    timeSeries = fileProc->read("datasets/data.txt",1);
-
+    timeSeries = fileProc->read("datasets/monthlySunspotNumbers.txt",1);
+//    timeSeries = fileProc->read("datasets/dailyMinimumTemperatures.txt",1);
+    
     timeSeries =  dataproc->process(timeSeries,1);
     
     
@@ -122,7 +126,7 @@ int main(int argc, char** argv) {
         result = dataproc->postProcess(result);
         std::cout<<"result processed: "<<result<<std::endl<<std::endl;
         
-        out_file<<result+700<<"\n";
+        out_file<<result/3 - 100<<"\n";
     }
     return 0;
 }

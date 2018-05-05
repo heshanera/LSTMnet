@@ -53,6 +53,7 @@ std::vector<double> DataProcessor::postprocess(std::vector<double> vec) {
 double DataProcessor::postProcess(double val) {
 
 //    std::cout<<"post processing...\n";
+//    std::cout<<"\n"<<out_magnitude<<"******"<<"\n";
     return val*(out_magnitude);
 }
 
