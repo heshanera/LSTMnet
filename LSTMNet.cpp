@@ -397,7 +397,7 @@ int LSTMNet::clearVectors() {
     return 0;
 }
 
-double LSTMNet::predict(std::vector<double> * input, std::vector<double> output) {
+double LSTMNet::predict(std::vector<double> * input) {
 
     forward(input, 1);
 //    std::cout<<"\n"<<memCellOutArr[0].at(0)<<"\n";

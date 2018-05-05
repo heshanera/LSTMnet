@@ -113,21 +113,15 @@ int main(int argc, char** argv) {
         inVec = dataproc->process(inVec,0);
         input[0] = inVec;
         
-        std::vector<double> tmpOut;
-//        if ((i+1)%timeSteps == 0) {
-//            std::vector<double>::const_iterator first = timeSeries.begin() + (timeSteps*(i/timeSteps));
-//            std::vector<double>::const_iterator last = timeSeries.begin() + (timeSteps*(i/timeSteps) + timeSteps);
-//            std::vector<double> outVec(first, last);
-//            tmpOut = outVec;
-//        }
-
-        result = lstm->predict(input,tmpOut);
+        result = lstm->predict(input);
         std::cout<<std::endl<<"result: "<<result<<std::endl;
         result = dataproc->postProcess(result);
         std::cout<<"result processed: "<<result<<std::endl<<std::endl;
         
         out_file<<result/3 - 100<<"\n";
     }
+    
+    
     return 0;
 }
 
