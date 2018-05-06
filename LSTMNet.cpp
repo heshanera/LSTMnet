@@ -161,7 +161,7 @@ int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int 
         
 //        printVector(outVec);
         
-        forward(input,timeSteps);
+        forward(inVec,timeSteps);
         backward(outVec,timeSteps);
         
         for (int p = 0; p < memCells; p++) {

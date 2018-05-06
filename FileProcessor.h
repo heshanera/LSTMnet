@@ -19,7 +19,7 @@ public:
     virtual ~FileProcessor();
     
     std::vector<double> read(std::string fileName, int valuesPerLine);
-    std::vector<double> * readMultivariate(std::string fileName, int lines, int variables, int targetValCol);
+    std::vector<double> * readMultivariate(std::string fileName, int lines, int variables, int * inputCols, int targetValCol);
     
     int write(std::string fileName);
     int append(std::string line);

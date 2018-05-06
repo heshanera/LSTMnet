@@ -34,7 +34,7 @@ std::vector<double> DataProcessor::process(std::vector<double> vec, int vecType)
         }
     }
     
-    // if output vector
+    // if target vector
     if (vecType == 1) out_magnitude = magnitude;
     
     return vec;
