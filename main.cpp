@@ -128,8 +128,7 @@ int main(int argc, char** argv) {
     int trainDataSize = 5000; // train data size
     int timeSteps = 1; // data points used for one forward step
     float learningRate = 0.0001;
-    int predictions = 5000; // prediction points
-    int iterations = 8; // training iterations with training data
+    int iterations = 10; // training iterations with training data
     int lines = 5000;
     
     DataProcessor * dataproc;
@@ -158,19 +157,18 @@ int main(int argc, char** argv) {
         if (*it == 0) *it = -1;
     }    
     
-    dataproc->printVector(targetVector);
-    
     // Training the LSTM net
     LSTMNet * lstm = new LSTMNet(memCells,inputVecSize);    
     lstm->train(input, targetVector, trainDataSize, timeSteps, learningRate, iterations);
   
+    
+    // Predictions
+    int predictions = 2000; // prediction points
+    timeSeries = fileProc->readMultivariate("datasets/occupancyData/datatest.txt",lines,inputVecSize,colIndxs,targetValCol);
     input = new std::vector<double>[1];
     double result;
-    
     double min = 0, max = 0;
-    
     std::vector<double> resultVec;
-    
     for (int i = 0; i < predictions; i++) {    
         input[0] = dataproc->process(timeSeries[i],0);
         result = lstm->predict(input);
@@ -189,24 +187,30 @@ int main(int argc, char** argv) {
     std::cout<<"min: "<<min<<std::endl;
     std::cout<<"max: "<<max<<std::endl;
     
-    double line = (min + max)/2;
+    double line = 0; //(min + max)/2;
     std::cout<<"margin: "<<line<<std::endl<<std::endl;
     
     int corr = 0;
     int incorr = 0;
     
-    int occu = 0, notoccu = 0;
+    int truePos = 0;
+    int falsePos = 0;
+    int trueNeg = 0;
+    int falseNeg = 0;
     
     for (int i = 0; i < predictions; i++) {    
         if ( (resultVec.at(i) > line) && (timeSeries[lines].at(i) == 1)) { 
             corr++;
-            occu++;
+            truePos++;
         } else if ( (resultVec.at(i) <= line) && (timeSeries[lines].at(i) == 0)) {
             corr++;
-            notoccu++;
-        } else { 
-//            std::cout<<resultVec.at(i)<<" ------ "<<timeSeries[lines].at(i)<<"\n";
+            trueNeg++;
+        } else if ( (resultVec.at(i) <= line) && (timeSeries[lines].at(i) == 1)) { 
             incorr++; 
+            falseNeg++;
+        } else if ( (resultVec.at(i) > line) && (timeSeries[lines].at(i) == 0)) { 
+            incorr++; 
+            falsePos++;
         }
 //        std::cout<<resultVec.at(i)<<" ------ "<<timeSeries[lines].at(i)<<"\n";
         
@@ -217,8 +221,12 @@ int main(int argc, char** argv) {
     std::cout<<"correct: "<<corr<<std::endl;
     std::cout<<"Incorrect: "<<incorr<<std::endl<<std::endl;
     
-    std::cout<<"Occupied: "<<occu<<std::endl;
-    std::cout<<"Not Occupied: "<<notoccu<<std::endl;
+    std::cout<<"True Positive: "<<truePos<<std::endl;
+    std::cout<<"True Negative: "<<trueNeg<<std::endl;
+    std::cout<<"False Positive: "<<falsePos<<std::endl;
+    std::cout<<"False Negative: "<<falseNeg<<std::endl;
+    
+    std::cout<<std::endl<<"Accuracy: "<<(corr/(double)predictions)*100<<"%"<<std::endl;
     
     return 0;
 }
