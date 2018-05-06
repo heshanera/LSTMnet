@@ -125,11 +125,11 @@ int main(int argc, char** argv) {
     
     int memCells = 10; // number of memory cells
     int inputVecSize = 5; // input vector size
-    int trainDataSize = 10; // train data size
-    int timeSteps = 5; // data points used for one forward step
-    float learningRate = 0.5;
+    int trainDataSize = 5000; // train data size
+    int timeSteps = 1; // data points used for one forward step
+    float learningRate = 0.0001;
     int predictions = 5000; // prediction points
-    int iterations = 5; // training iterations with training data
+    int iterations = 8; // training iterations with training data
     int lines = 5000;
     
     DataProcessor * dataproc;
@@ -154,7 +154,11 @@ int main(int argc, char** argv) {
     std::vector<double>::const_iterator first = timeSeries[lines].begin();
     std::vector<double>::const_iterator last = timeSeries[lines].begin() + trainDataSize;
     std::vector<double> targetVector(first, last);
-//    dataproc->printVector(targetVector);
+    for (std::vector<double>::iterator it = targetVector.begin(); it != targetVector.end(); ++it) {
+        if (*it == 0) *it = -1;
+    }    
+    
+    dataproc->printVector(targetVector);
     
     // Training the LSTM net
     LSTMNet * lstm = new LSTMNet(memCells,inputVecSize);    

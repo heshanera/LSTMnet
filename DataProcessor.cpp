@@ -20,7 +20,7 @@ DataProcessor::~DataProcessor() { }
 
 std::vector<double> DataProcessor::process(std::vector<double> vec, int vecType) {
 
-    std::cout<<"processing...\n";
+    //std::cout<<"processing...\n";
     
     double magnitude = 0.0;
     for(std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it) {

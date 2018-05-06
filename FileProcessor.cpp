@@ -41,19 +41,6 @@ std::vector<double> FileProcessor::read(std::string fileName, int valuesPerLine)
     
 }
 
-/**
- * Read a text file containing comma separated values.
- * 
- * @param fileName file name of the multivariate data series
- * @param lines no of lines that should be read
- * @param variables variable in the file
- * @param inputCols index of the variable in a line that should used to create the vector
- * @param targetValCol index of the target value column
- * @return an array of vectors
- * 
- * each vector contain variables in one row
- * last array vector is the target vector 
- */
 std::vector<double> * FileProcessor::readMultivariate(std::string fileName, int lines, int variables, int * inputCols, int targetValCol) {
     
     std::string line;
