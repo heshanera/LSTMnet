@@ -63,4 +63,5 @@ int DataProcessor::printVector(std::vector<double> vec){
         std::cout << *it<<", ";
     }
     std::cout<<std::endl;
+    return 0;
 }

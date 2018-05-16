@@ -88,10 +88,12 @@ std::vector<double> * FileProcessor::readMultivariate(std::string fileName, int 
 
 int FileProcessor::write(std::string fileName) {
     out_file.open(fileName,std::ofstream::out | std::ofstream::app);
+    return 0;
 }
 
 int FileProcessor::append(std::string line) {
     out_file<<"";
+    return 0;
 }
 
 int FileProcessor::writeUniVariate(std::string fileName, std::string outFileName, int valuesPerLine, int columnIndx) {

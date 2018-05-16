@@ -56,7 +56,7 @@
           <standard>10</standard>
         </cTool>
         <ccTool>
-          <standard>8</standard>
+          <standard>11</standard>
         </ccTool>
       </compileType>
       <item path="DataProcessor.cpp" ex="false" tool="1" flavor2="0">

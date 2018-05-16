@@ -18,13 +18,13 @@
 int main(int argc, char** argv) {
 
     
-//    int dataSize = 500; // train data size
+//    int dataSize = 250; // train data size
 //    
 //    int memCells = 8; // number of memory cells
-//    int inputVecSize = 30; // input vector size
+//    int inputVecSize = 20; // input vector size
 //    int trainDataSize = dataSize; 
-//    int timeSteps = 30;
-//    float learningRate = 0.01;
+//    int timeSteps = 20;
+//    float learningRate = 0.02;
 //    int predictions = 1000; // prediction points
 //    int iterations = 5; // training iterations with training data
 //    
@@ -61,6 +61,7 @@ int main(int argc, char** argv) {
 ////    timeSeries = fileProc->read("datasets/data.txt",1);
 ////    timeSeries = fileProc->read("datasets/monthlySunspotNumbers.txt",1);
 ////    timeSeries = fileProc->read("datasets/dailyMinimumTemperatures.txt",1);
+////    timeSeries = fileProc->read("datasets/hr2.txt",1);
 //    
 //    timeSeries =  dataproc->process(timeSeries,1);
 //    
@@ -103,6 +104,7 @@ int main(int argc, char** argv) {
 //        out_file<<dataproc->postProcess(timeSeries.at(i))<<"\n";
 //    }
 //    
+//    
 //    for (int i = 0; i < predictions; i++) {
 //        
 //        inVec.clear();
@@ -118,7 +120,7 @@ int main(int argc, char** argv) {
 //        result = dataproc->postProcess(result);
 //        std::cout<<"result processed: "<<result<<std::endl<<std::endl;
 //        
-//        out_file<<result<<"\n";
+//        out_file<<result + 35000<<"\n";
 //    }
     
     ///////////////////////// Multivariate time series data prediction ////////////////////////////////////
@@ -157,14 +159,17 @@ int main(int argc, char** argv) {
         if (*it == 0) *it = -1;
     }    
     
+    
     // Training the LSTM net
     LSTMNet * lstm = new LSTMNet(memCells,inputVecSize);    
     lstm->train(input, targetVector, trainDataSize, timeSteps, learningRate, iterations);
   
     
     // Predictions
-    int predictions = 2000; // prediction points
-    timeSeries = fileProc->readMultivariate("datasets/occupancyData/datatest.txt",lines,inputVecSize,colIndxs,targetValCol);
+    int predictions = 9750; // prediction points
+    lines = 9750; // lines read from the files
+    
+    timeSeries = fileProc->readMultivariate("datasets/occupancyData/datatest2.txt",lines,inputVecSize,colIndxs,targetValCol);
     input = new std::vector<double>[1];
     double result;
     double min = 0, max = 0;
@@ -190,6 +195,9 @@ int main(int argc, char** argv) {
     double line = 0; //(min + max)/2;
     std::cout<<"margin: "<<line<<std::endl<<std::endl;
     
+    
+    int occu = 0, notoccu = 0;
+    
     int corr = 0;
     int incorr = 0;
     
@@ -198,19 +206,26 @@ int main(int argc, char** argv) {
     int trueNeg = 0;
     int falseNeg = 0;
     
+    int corrNwMgn = 0;
+    int incorrNwMgn = 0;
+    
     for (int i = 0; i < predictions; i++) {    
         if ( (resultVec.at(i) > line) && (timeSeries[lines].at(i) == 1)) { 
             corr++;
             truePos++;
+            occu++;
         } else if ( (resultVec.at(i) <= line) && (timeSeries[lines].at(i) == 0)) {
             corr++;
             trueNeg++;
+            notoccu++;
         } else if ( (resultVec.at(i) <= line) && (timeSeries[lines].at(i) == 1)) { 
             incorr++; 
             falseNeg++;
+            occu++;
         } else if ( (resultVec.at(i) > line) && (timeSeries[lines].at(i) == 0)) { 
             incorr++; 
             falsePos++;
+            notoccu++;
         }
 //        std::cout<<resultVec.at(i)<<" ------ "<<timeSeries[lines].at(i)<<"\n";
         
@@ -218,15 +233,91 @@ int main(int argc, char** argv) {
     
     std::cout<<std::endl;
     
-    std::cout<<"correct: "<<corr<<std::endl;
-    std::cout<<"Incorrect: "<<incorr<<std::endl<<std::endl;
+    std::cout<<"----------------------"<<std::endl;
+    std::cout<<"Data "<<std::endl;
+    std::cout<<"----------------------"<<std::endl;
+    std::cout<<"Occupied: "<<occu<<std::endl;
+    std::cout<<"NotOccupied: "<<notoccu<<std::endl<<std::endl;
+    
+    std::cout<<"----------------------"<<std::endl;
+    std::cout<<"margin: "<<line<<std::endl;
+    std::cout<<"----------------------"<<std::endl;
+    std::cout<<"Correct predictions: "<<corr<<std::endl;
+    std::cout<<"Incorrect predictions: "<<incorr<<std::endl<<std::endl;
     
     std::cout<<"True Positive: "<<truePos<<std::endl;
     std::cout<<"True Negative: "<<trueNeg<<std::endl;
     std::cout<<"False Positive: "<<falsePos<<std::endl;
     std::cout<<"False Negative: "<<falseNeg<<std::endl;
     
-    std::cout<<std::endl<<"Accuracy: "<<(corr/(double)predictions)*100<<"%"<<std::endl;
+    std::cout<<std::endl<<"Accuracy: "<<(corr/(double)predictions)*100<<"%"<<std::endl<<std::endl;
+    
+    
+    line = (min + max)/2;
+    occu = 0;
+    notoccu = 0;
+    corr = 0;
+    incorr = 0;
+    truePos = 0;
+    falsePos = 0;
+    trueNeg = 0;
+    falseNeg = 0;
+    
+    for (int i = 0; i < predictions; i++) {    
+        if ( (resultVec.at(i) > line) && (timeSeries[lines].at(i) == 1)) { 
+            corr++;
+            truePos++;
+            occu++;
+        } else if ( (resultVec.at(i) <= line) && (timeSeries[lines].at(i) == 0)) {
+            corr++;
+            trueNeg++;
+            notoccu++;
+        } else if ( (resultVec.at(i) <= line) && (timeSeries[lines].at(i) == 1)) { 
+            incorr++; 
+            falseNeg++;
+            occu++;
+        } else if ( (resultVec.at(i) > line) && (timeSeries[lines].at(i) == 0)) { 
+            incorr++; 
+            falsePos++;
+            notoccu++;
+        }
+        
+        
+        
+        if (line > 0) {
+            if ( (resultVec.at(i) <= line) && (resultVec.at(i) > 0)) {
+                if (timeSeries[lines].at(i) == 0) {
+                    corrNwMgn++;
+                } else incorrNwMgn++;
+            }
+        } else {
+            if ( (resultVec.at(i) > line) && (resultVec.at(i) < 0)) {
+                if (timeSeries[lines].at(i) == 1) {
+                    corrNwMgn++;
+                } else incorrNwMgn++;
+            }
+        }
+        
+    }
+    
+    std::cout<<"----------------------"<<std::endl;
+    std::cout<<"margin: "<<line<<std::endl;
+    std::cout<<"----------------------"<<std::endl;
+    std::cout<<"Correct predictions: "<<corr<<std::endl;
+    std::cout<<"Incorrect predictions: "<<incorr<<std::endl<<std::endl;
+    
+    std::cout<<"True Positive: "<<truePos<<std::endl;
+    std::cout<<"True Negative: "<<trueNeg<<std::endl;
+    std::cout<<"False Positive: "<<falsePos<<std::endl;
+    std::cout<<"False Negative: "<<falseNeg<<std::endl;
+    
+    std::cout<<std::endl<<"Accuracy: "<<(corr/(double)predictions)*100<<"%"<<std::endl<<std::endl;
+    
+    std::cout<<"----------------------"<<std::endl;
+    std::cout<<"Within the new margin and 0"<<std::endl;
+    std::cout<<"----------------------"<<std::endl;
+    std::cout<<"Correct: "<<corrNwMgn<<std::endl;
+    std::cout<<"Incorrect: "<<incorrNwMgn<<std::endl<<std::endl<<std::endl;
     
     return 0;
 }

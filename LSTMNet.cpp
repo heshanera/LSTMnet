@@ -110,7 +110,7 @@ int LSTMNet::backward(std::vector<double> output, int timeSteps) {
 
         }
     }
-    
+    return 0;
 }
 
 int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int trainDataSize, int timeSteps, float learningRate, int iterations){
@@ -302,16 +302,28 @@ int LSTMNet::initWeights() {
         std::vector<double>  oWeightVec;
         oWeightVec.clear();
 
+        double w, max, min, diff;
+        //****//
+        min = -0.01;
+        max = 0.01;
+        //****//
+//        min = sqrt(6/(inputVectDim + 1)) * -1;
+//        max = sqrt(6/(inputVectDim + 1));     
+        //****//
+//        min = -1/sqrt(inputVectDim); 
+//        max = 1/sqrt(inputVectDim);
+        
+        diff = max - min;
+//        srand(time(NULL));  // if not random numbers are generated in the same order
         for(int j = 0; j < weightVecSize; j++) {
-            double w;
             w= (double)rand() / RAND_MAX;
-            aWeightVec.push_back(-0.01 + w * 0.02); // Min + w * (Max - Min);
+            aWeightVec.push_back(min + w * diff); // Min + w * (Max - Min);
             w= (double)rand() / RAND_MAX;
-            iWeightVec.push_back(-0.01 + w * 0.02); // Min + w * (Max - Min);
+            iWeightVec.push_back(min + w * diff); // Min + w * (Max - Min);
             w= (double)rand() / RAND_MAX;
-            fWeightVec.push_back(-0.01 + w * 0.02); // Min + w * (Max - Min);
+            fWeightVec.push_back(min + w * diff); // Min + w * (Max - Min);
             w= (double)rand() / RAND_MAX;
-            oWeightVec.push_back(-0.01 + w * 0.02); // Min + w * (Max - Min);
+            oWeightVec.push_back(min + w * diff); // Min + w * (Max - Min);
         }
         
         aWeightVecArr[i] = aWeightVec;
@@ -442,4 +454,5 @@ int LSTMNet::printVector(std::vector<double> vec) {
     for (std::vector<double>::iterator it = vec.begin(); it != vec.end(); ++it)
         std::cout << *it << ' ';
     std::cout << '\n';
+    return 0;
 }
