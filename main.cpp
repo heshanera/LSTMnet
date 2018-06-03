@@ -151,7 +151,7 @@ int multivarPredicts() {
     int targetValCol = 7;
     
     std::vector<double> * timeSeries;
-    timeSeries = fileProc->readMultivariate("datasets/occupancyData/datatraining.txt",lines,inputVecSize,colIndxs,targetValCol);
+    timeSeries = fileProc->readMultivariate("datasets/multivariate/input/occupancyData/datatraining.txt",lines,inputVecSize,colIndxs,targetValCol);
     
     // Creating the input vector Array
     std::vector<double> * input;
@@ -176,7 +176,7 @@ int multivarPredicts() {
     int predictions = 2000; // prediction points
     lines = 2000; // lines read from the files
     
-    timeSeries = fileProc->readMultivariate("datasets/occupancyData/datatest.txt",lines,inputVecSize,colIndxs,targetValCol);
+    timeSeries = fileProc->readMultivariate("datasets/multivariate/input/occupancyData/datatest.txt",lines,inputVecSize,colIndxs,targetValCol);
     input = new std::vector<double>[1];
     double result;
     double min = 0, max = 0;
@@ -219,8 +219,8 @@ int multivarPredicts() {
     // Open the file to write the time series predictions
     std::ofstream out_file;
     std::ofstream out_file2;
-    out_file.open("datasets/multiResults.txt",std::ofstream::out | std::ofstream::trunc);
-    out_file2.open("datasets/multiTargets.txt",std::ofstream::out | std::ofstream::trunc);
+    out_file.open("datasets/multivariate/predictions/occupancyData/multiResults.txt",std::ofstream::out | std::ofstream::trunc);
+    out_file2.open("datasets/multivariate/predictions/occupancyData/multiTargets.txt",std::ofstream::out | std::ofstream::trunc);
     
     for (int i = 0; i < predictions; i++) { 
         out_file<<timeSeries[lines].at(i)<<","<<resultVec.at(i)<<"\n";
@@ -345,9 +345,9 @@ int multivarPredicts() {
 int main() {
 
     // predicting univariate time series
-    univarPredicts();
+    //univarPredicts();
     
     // predicting multivariate series
-    //multivarPredicts();
+    multivarPredicts();
 
 }
