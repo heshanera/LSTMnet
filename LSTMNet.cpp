@@ -14,11 +14,9 @@ LSTMNet::LSTMNet(int memCells, int inputVecSize) {
     noOfIns = 0;
 }
 
-LSTMNet::LSTMNet(const LSTMNet& orig) {
-}
+LSTMNet::LSTMNet(const LSTMNet& orig) { }
 
-LSTMNet::~LSTMNet() {
-}
+LSTMNet::~LSTMNet() { }
 
 int LSTMNet::forward(std::vector<double> * input, int timeSteps) {
     
@@ -150,7 +148,6 @@ int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int 
     
     std::vector<double> *inVec;
     
-    
     for (int i = 0; i < trainingIterations; i++){
         
         inVec = input + (timeSteps*i);
@@ -158,8 +155,6 @@ int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int 
         std::vector<double>::const_iterator first = output.begin() + (timeSteps*i);
         std::vector<double>::const_iterator last = output.begin() + (timeSteps*i + timeSteps);
         std::vector<double> outVec(first, last);
-        
-//        printVector(outVec);
         
         forward(inVec,timeSteps);
         backward(outVec,timeSteps);
@@ -185,23 +180,19 @@ int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int 
                     oDeltaWeightVecArr[p].at(wPos) += *it * delta_o_t;
                     wPos++;
                 }
-
                 delta_bias_a_t += delta_a_t;
                 delta_bias_i_t += delta_i_t;
                 delta_bias_f_t += delta_f_t;
                 delta_bias_o_t += delta_o_t;
             }
-
             aBiasArr[p] -= (delta_bias_a_t * learningRate);
             iBiasArr[p] -= (delta_bias_i_t * learningRate);       
             fBiasArr[p] -= (delta_bias_f_t * learningRate);
             oBiasArr[p] -= (delta_bias_o_t * learningRate);
             
         }
-        
-                
+          
         index += timeSteps;
-        
         for(int j = 0; j < memCells; j++) {
             
             std::transform(
@@ -248,10 +239,8 @@ int LSTMNet::train(std::vector<double> * input, std::vector<double> output, int 
                 oWeightVecArr[j].begin(), oWeightVecArr[j].end(), 
                 oDeltaWeightVecArr[j].begin(), oWeightVecArr[j].begin(), 
                 std::minus<double>()
-            );
-            
-        }
-        
+            );  
+        } 
         clearVectors();
     }    
     return 0;
@@ -405,7 +394,6 @@ int LSTMNet::clearVectors() {
         memCellOutArr[i].clear();
         memCellOutArr[i].push_back(out);
     }        
-        
     return 0;
 }
 
@@ -424,7 +412,6 @@ double LSTMNet::predict(std::vector<double> * input) {
         result += *(memCellOutArr[i].end()-1);
     }
     
-    
 //    output2.push_back(result);
 //    if (noOfIns == timeSteps) {
 //        printVector(memCellOutArr[0]);
@@ -434,8 +421,7 @@ double LSTMNet::predict(std::vector<double> * input) {
 //        noOfIns = 0;
 //        train(input2, output, timeSteps, timeSteps, 0.095);
 //    }
-    
-    
+ 
     return result;
 }
 
