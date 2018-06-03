@@ -19,9 +19,22 @@ int inputVecSize = 100; // input vector size
 int trainDataSize = dataSize; 
 int timeSteps = 100;
 float learningRate = 0.05;
-int predictions = 1000; // prediction points
+int predictions = 1000; // prediction pointss
 int iterations = 5; // training iterations with training data
 $$result/8+8;
 
 float learningRate = 0.15;
 $$result*9+7045;
+
+
+** InternetTraff **
+
+int dataSize = 300; // train data size
+int memCells = 5; // number of memory cells
+int inputVecSize = 60; // input vector size
+int trainDataSize = dataSize; 
+int timeSteps = 6;
+float learningRate = 0.02;
+int predictions = 1580; // prediction points
+int iterations = 10; // training iterations with training data
+$$result-25000;

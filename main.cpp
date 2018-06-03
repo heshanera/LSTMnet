@@ -5,7 +5,6 @@
  * Created on April 8, 2018, 12:46 PM
  */
 
-#include <cstdlib>
 #include <vector>
 
 #include "LSTMNet.h"
@@ -13,16 +12,14 @@
 #include "FileProcessor.h"
 
 int univarPredicts() {
-
-    int dataSize = 300; // train data size
     
     int memCells = 5; // number of memory cells
-    int inputVecSize = 100; // input vector size
-    int trainDataSize = dataSize; 
-    int timeSteps = 100;
-    float learningRate = 0.05;
-    int predictions = 2000; // prediction points
-    int iterations = 5; // training iterations with training data
+    int trainDataSize = 300; // train data size
+    int inputVecSize = 60; // input vector size
+    int timeSteps = 60; // unfolded time steps
+    float learningRate = 0.02;
+    int predictions = 1580; // prediction points
+    int iterations = 10; // training iterations with training data
     
     // Adding the time series in to a vector and preprocessing
     DataProcessor * dataproc;
@@ -45,35 +42,37 @@ int univarPredicts() {
 //    fileProc->writeUniVariate("datasets/monthlySunspotNumbers.csv","datasets/monthlySunspotNumbers.txt",2,1);
 //    fileProc->writeUniVariate("datasets/dailyMinimumTemperatures.csv","datasets/dailyMinimumTemperatures.txt",2,1);    
     
-    //////////////////////////////////////////////////////    
     
-//    timeSeries = fileProc->read("datasets/dummy2.txt",1);
-//    timeSeries = fileProc->read("datasets/InternetTraff.txt",1);
-//    timeSeries = fileProc->read("datasets/monthlyReturnsOfValueweighted.txt",1);
-//    timeSeries = fileProc->read("datasets/treeAlmagreMountainPiarLocat.txt",1);
-//    timeSeries = fileProc->read("datasets/dailyCyclistsAlongSudurlandsb.txt",1);
-//    timeSeries = fileProc->read("datasets/totalPopulation.txt",1);
-//    timeSeries = fileProc->read("datasets/numberOfUnemployed.txt",1);
-//    timeSeries = fileProc->read("datasets/data.txt",1);
-//    timeSeries = fileProc->read("datasets/monthlySunspotNumbers.txt",1);
-    timeSeries = fileProc->read("datasets/dailyMinimumTemperatures.txt",1);
-//    timeSeries = fileProc->read("datasets/hr2.txt",1);
+    ///////////// Data Sets //////////////////////////////
     
+    std::string datasets[] = {
+        /* 0*/ "dummy2.txt",
+        /* 1*/ "InternetTraff.txt",
+        /* 2*/ "monthlyReturnsOfValueweighted.txt",
+        /* 3*/ "treeAlmagreMountainPiarLocat.txt",
+        /* 4*/ "dailyCyclistsAlongSudurlandsb.txt",
+        /* 5*/ "totalPopulation.txt",
+        /* 6*/ "numberOfUnemployed.txt",
+        /* 7*/ "data.txt",
+        /* 8*/ "monthlySunspotNumbers.txt",
+        /* 9*/ "dailyMinimumTemperatures.txt",
+        /*10*/ "hr2.txt"
+    };
+    
+    std::string inFile = datasets[1];
+    timeSeries = fileProc->read("datasets/univariate/input/"+inFile,1);
     timeSeries =  dataproc->process(timeSeries,1);
-    
     
     // Creating the input vector Array
     std::vector<double> * input;
-    //dataSize += inputVecSize;
-    input = new std::vector<double>[dataSize];
+    input = new std::vector<double>[trainDataSize];
     std::vector<double> inputVec;
     
-    for (int i = 0; i < dataSize; i++) {
+    for (int i = 0; i < trainDataSize; i++) {
         inputVec.clear();
         for (int j = 0; j < inputVecSize; j++) {
             inputVec.push_back(timeSeries.at(i+j));
         }
-       
         inputVec =  dataproc->process(inputVec,0);
         input[i] = inputVec; 
     }
@@ -90,7 +89,7 @@ int univarPredicts() {
   
     // Open the file to write the time series predictions
     std::ofstream out_file;
-    out_file.open("datasets/results.txt",std::ofstream::out | std::ofstream::trunc);
+    out_file.open("datasets/univariate/predictions/"+inFile,std::ofstream::out | std::ofstream::trunc);
     
     std::vector<double> inVec;
     input = new std::vector<double>[1];
@@ -121,6 +120,7 @@ int univarPredicts() {
         //MSE += std::pow(expected-result,2);
         
         result = dataproc->postProcess(result);
+        out_file<<result-25000<<"\n";
         std::cout<<"result processed: "<<result<<std::endl<<std::endl;
     }
   
@@ -348,6 +348,6 @@ int main() {
     univarPredicts();
     
     // predicting multivariate series
-    multivarPredicts();
+    //multivarPredicts();
 
 }
