@@ -18,7 +18,7 @@ int univarPredicts() {
     int inputVecSize = 60; // input vector size
     int timeSteps = 60; // unfolded time steps
     float learningRate = 0.02;
-    int predictions = 1580; // prediction points
+    int predictions = 1300; // prediction points
     int iterations = 10; // training iterations with training data
     
     // Adding the time series in to a vector and preprocessing
@@ -59,7 +59,12 @@ int univarPredicts() {
         /*10*/ "hr2.txt"
     };
     
-    std::string inFile = datasets[1];
+    std::string datasets2[] = {
+        /* 0*/ "dummy2Anml.txt",
+        /* 1*/ "dailyMinimumTemperaturesAnml.txt"
+    };
+    
+    std::string inFile = datasets2[0];
     timeSeries = fileProc->read("datasets/univariate/input/"+inFile,1);
     timeSeries =  dataproc->process(timeSeries,1);
     
@@ -120,7 +125,7 @@ int univarPredicts() {
         //MSE += std::pow(expected-result,2);
         
         result = dataproc->postProcess(result);
-        out_file<<result-25000<<"\n";
+        out_file<<result<<"\n";
         std::cout<<"result processed: "<<result<<std::endl<<std::endl;
     }
   
