@@ -15,7 +15,7 @@ The LSTM network is implemented with memory blocks containing one memory cell in
 
 ## Creating A Network
 
-##### initializing variables
+###### initializing variables
 ```
 int memCells = 5; // number of memory cells
 int trainDataSize = 300; // train data size
@@ -25,18 +25,29 @@ float learningRate = 0.02; // leraning rate
 int predictions = 1300; // prediction points
 int iterations = 10; // training iterations with training data
 ```
-##### Initializing the network
+###### Initializing the network
 ```
 LSTMNet lstm(memCells,inputVecSize);
 ```
-##### Training
+###### Training
 ```
 lstm.train(input, targetVector, trainDataSize, timeSteps, learningRate, iterations);
 ```
-##### Testing
+###### Testing
 ```
 double result;
 result = lstm.predict(input);
 ```
 
-### Predictions
+## Predictions
+
+![structure](https://github.com/heshanera/LSTMnet/blob/master/imgs/SeaLevelPressures.png)
+* The sea level pressure dataset for Darwin from the Climate Prediction Center
+------
+
+![structure](https://github.com/heshanera/LSTMnet/blob/master/imgs/DailyMinimumTemperatures.png)
+* Daily minimum temperatures in Melbourne, Australia, 1981-1990 
+------
+
+![structure](https://github.com/heshanera/LSTMnet/blob/master/imgs/InternetTraffic.png)
+* Internet traffic data (in bits) from an ISP. Aggregated traffic in the United Kingdom academic network backbone. It was collected between 19 November 2004, at 09:30 hours and 27 January 2005, at 11:11 hours. Hourly data
