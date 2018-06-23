@@ -17,7 +17,7 @@ int univarPredicts() {
     int trainDataSize = 300; // train data size
     int inputVecSize = 60; // input vector size
     int timeSteps = 60; // unfolded time steps
-    float learningRate = 0.02;
+    float learningRate = 0.01;
     int predictions = 1300; // prediction points
     int iterations = 10; // training iterations with training data
     
@@ -64,7 +64,7 @@ int univarPredicts() {
         /* 1*/ "dailyMinimumTemperaturesAnml.txt"
     };
     
-    std::string inFile = datasets2[0];
+    std::string inFile = datasets[1];
     timeSeries = fileProc->read("datasets/univariate/input/"+inFile,1);
     timeSeries =  dataproc->process(timeSeries,1);
     
@@ -89,8 +89,8 @@ int univarPredicts() {
     std::vector<double> targetVector(first, last);
     
     // Training the LSTM net
-    LSTMNet * lstm = new LSTMNet(memCells,inputVecSize);
-    lstm->train(input, targetVector, trainDataSize, timeSteps, learningRate, iterations);
+    LSTMNet lstm(memCells,inputVecSize);
+    lstm.train(input, targetVector, trainDataSize, timeSteps, learningRate, iterations);
   
     // Open the file to write the time series predictions
     std::ofstream out_file;
@@ -118,14 +118,14 @@ int univarPredicts() {
         inVec = dataproc->process(inVec,0);
         input[0] = inVec;
         
-        result = lstm->predict(input);
+        result = lstm.predict(input);
         std::cout<<std::endl<<"result: "<<result<<std::endl;
         
         expected = timeSeries.at(i+inputVecSize+1);
         //MSE += std::pow(expected-result,2);
         
         result = dataproc->postProcess(result);
-        out_file<<result<<"\n";
+        out_file<<result-20000<<"\n";
         std::cout<<"result processed: "<<result<<std::endl<<std::endl;
     }
   
