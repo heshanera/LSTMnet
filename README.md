@@ -38,14 +38,3 @@ lstm.train(input, targetVector, trainDataSize, timeSteps, learningRate, iteratio
 double result;
 result = lstm.predict(input);
 ```
-
-## Predictions
-
-![structure](https://github.com/heshanera/LSTMnet/blob/master/imgs/SeaLevelPressures.png)
-*The sea level pressure dataset for Darwin from the Climate Prediction Center*<br><br><br>
-
-![structure](https://github.com/heshanera/LSTMnet/blob/master/imgs/DailyMinimumTemperatures.png)
-*Daily minimum temperatures in Melbourne, Australia, 1981-1990*<br><br><br>
-
-![structure](https://github.com/heshanera/LSTMnet/blob/master/imgs/InternetTraffic.png)
-*Internet traffic data (in bits) from an ISP. Aggregated traffic in the United Kingdom academic network backbone. It was collected between 19 November 2004, at 09:30 hours and 27 January 2005, at 11:11 hours. Hourly data*
